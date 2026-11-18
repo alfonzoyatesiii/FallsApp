@@ -136,7 +136,7 @@ def empty_state():
 
 def safety(flags, mode):
     base = ("If someone is hurt, cannot get up, hit their head, or you are unsure, contact a doctor or call emergency services "
-            "(911 in the U.S.). Do not wait for this tool.")
+            "(911 in the U.S.). DO NOT wait for this tool!")
     if flags:
         listed = esc("; ".join(flags))
         who = "Follow your facility's post-fall protocol and clinical assessment. " if mode == "facility" else ""
