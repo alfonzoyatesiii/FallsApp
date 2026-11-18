@@ -92,6 +92,11 @@ div[data-testid="stFormSubmitButton"] button:hover { background:#f0b445 !importa
 button[kind="secondary"], button[data-testid="stBaseButton-secondary"] { border-radius:999px !important; border:2px solid var(--blue) !important; background:#fff !important; color:var(--blue-deep) !important; font-weight:500 !important; }
 .stTextArea textarea { font-size:1.05rem !important; line-height:1.5; border-radius:12px; border:2px solid var(--line); background:#fff; }
 .stTextArea textarea:focus { border-color:var(--blue); }
+div[data-baseweb="select"] > div { background:#fff !important; color:var(--ink) !important; border:2px solid var(--line) !important; border-radius:12px !important; }
+div[data-baseweb="select"] span, div[data-baseweb="select"] div { color:var(--ink) !important; }
+div[data-baseweb="popover"] ul, div[data-baseweb="menu"] { background:#fff !important; }
+div[data-baseweb="popover"] li, li[role="option"] { background:#fff !important; color:var(--ink) !important; }
+li[role="option"]:hover, li[aria-selected="true"] { background:#e8f0fb !important; color:var(--blue-deep) !important; }
 .stTabs [data-baseweb="tab"] { font-size:1.05rem; padding:10px 14px; }
 .stTabs [aria-selected="true"] { color:var(--blue-deep); font-weight:600; }
 div[data-testid="stForm"] { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; }
