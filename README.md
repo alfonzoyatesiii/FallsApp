@@ -1,20 +1,20 @@
 # Fall Case Review Assistant
 
-DESIGNTK 530 Final Project, Checkpoint 2 · Alfonzo Yates · Duke M.Eng. Design and Technology Innovation
+Alfonzo Yates - DESIGNTK 530 Final Project, Checkpoint 2 
 
-**Live app:** _paste your Streamlit Cloud link here_
+**Live app:** https://fallsapp-hpi9iyqtpdcxdmubtxxxrb.streamlit.app/ 
 
 A web app where a person describes a fall in their own words and gets the most similar real emergency-department notes, a short cited summary, and a checklist of questions to ask. It does **not** diagnose, predict who will fall, or give medical advice.
 
+For this checkpoint I mainly wanted to focus on functionality. Next, I will enlarge the app's capabilities across multiple screens and added functionalities.
+
 ![The app on a phone](docs/preview_phone.png)
 
-> AI disclosure: Claude (Anthropic) helped write the code in this repo, and the code files say so. I reviewed the logic and ran the tests listed at the bottom.
+> AI disclosure: Claude helped write the code in this repo, and the code files say so. I reviewed the logic and ran tests.
 
 ---
 
 ## 1 Define your scope, users and objective(s)
-
-> *Requirements: a focused use case (not a generic chatbot); target users, their problem, and when they would use it; what a successful interaction enables; the architecture diagram; at least one input and its modality, one output, and one user decision, system action, and user outcome; any deviation from the dataset plan; and an interface sketch.*
 
 ### Use case and objective
 **Problem.** After a fall, the people involved need to work out what to look into and what to change. Incident notes and emergency-department records are short free text, and the structured fields (where, when, injury) say little about how the fall started. Finding similar past cases means reading notes by hand or searching exact keywords, which miss different wording such as "found down," "long lie," or "NH."
@@ -65,13 +65,11 @@ Built in this checkpoint: the three-way mode choice, the description box and fil
 
 ## 2 Establish the User Experience and Service Design
 
-> *Requirements: a usable interface with clear navigation, feedback, error/empty states, and enough explanation for a new visitor to understand it without me present; at least two consequential UX or product decisions, including how I revised the experience after building or testing it.*
-
 **Understandable without me present.** The first screen shows a three-step explainer (describe, compare, review), a plain statement of what the tool is not, and a privacy note. The "How it works" tab explains the steps in plain words. **Navigation and structure.** Three tabs: *Check a fall* (the tool), *How it works* (the agent steps), and *About the data and models* (the ML evidence).
 
 **Feedback while it works.** A live step-by-step status appears while the assistant runs, followed by a "How this answer was produced" table showing each step, whether it used code, AI, or ML, and how long it took. Each case has a "this tag looks wrong" button.
 
-**States designed.** First visit (a 3-step explainer), loading, success, weak match, no match, description too short, AI unavailable (reduced mode), no key (offline mode), and unexpected error. The layout was checked at phone width (390 px) and desktop width (1100 px), and the colors follow my portfolio site.
+**States designed.** First visit (a 3-step explainer), loading, success, weak match, no match, description too short, AI unavailable (reduced mode), no key (offline mode), and unexpected error. The layout was checked at phone width and desktop width, and the colors follow my portfolio site.
 
 ![Desktop preview](docs/preview_desktop.png)
 
@@ -86,8 +84,6 @@ Built in this checkpoint: the three-way mode choice, the description box and fil
 ---
 
 ## 3 Integrate an LLM and an agentic workflow
-
-> *Requirements: an LLM used for a meaningful task; a multi-step agent that retrieves, invokes tools or models, checks intermediate output, or iterates (a fixed sequence is acceptable if its steps and purpose are clear); the workflow shown with input, stages or tools, data accessed, outputs, and decision points; guardrails, failure modes, and what happens when the system cannot answer reliably.*
 
 The assistant follows a fixed, nine-step order. It does not choose its own steps, which keeps it predictable and checkable. Each step is shown on screen under "How this answer was produced."
 
@@ -133,8 +129,6 @@ The match-quality check (step 5) is the safeguard. If even the best note is a po
 ---
 
 ## 4 Incorporate traditional machine learning
-
-> *Requirements: at least one non-LLM method; the question it answers and why it fits; preprocessing, feature selection, fitting, and how outputs are interpreted; a consequential role in the app; and limitations with evidence.* This project uses **TF-IDF + SVD (a PCA-style compression) + K-Means clustering**, with PCA for the map.
 
 ### The question, in plain terms
 *"What kinds of fall stories show up in these notes, and which kind is this case most like?"* The notes do not come with a label for story type, so the computer has to find the groups on its own. This is called clustering. It fits because the app needs readable background for a case ("this looks like the bed-exit group"), not a prediction. I did not train a model to predict admission or fall risk: the data only includes people who reached an emergency department, so a risk score would be misleading.
@@ -185,6 +179,7 @@ Because of this, the groups are used as **rough background**, never as a score f
 
 ## What was and was not tested
 **Tested:** retrieval, tag checks, the verifier, and all fallbacks, using a fake AI client (13 scenarios pass); the ML outputs; the page logic running top to bottom against a stand-in for Streamlit in all three modes; and the page's HTML and CSS at phone and desktop widths.
-**Not tested:** live OpenAI calls (model `gpt-6-astra` and the Responses API, as in the class notebook), real Streamlit rendering of the button styling, and real users.
+
+**Not tested:** live OpenAI calls (model `gpt-6-astra` and the Responses API), real Streamlit rendering of the button styling, and real users.
 
 Data: U.S. CPSC NEISS 2024, adults 65+ falls. Not medical advice.
