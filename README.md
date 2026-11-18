@@ -12,7 +12,9 @@ A web app where a person describes a fall in their own words and gets the most s
 
 ---
 
-## 1. Define your scope, users, and objective(s)
+## 1 Define your scope, users and objective(s)
+
+> *Requirements: a focused use case (not a generic chatbot); target users, their problem, and when they would use it; what a successful interaction enables; the architecture diagram; at least one input and its modality, one output, and one user decision, system action, and user outcome; any deviation from the dataset plan; and an interface sketch.*
 
 ### Use case and objective
 **Problem.** After a fall, the people involved need to work out what to look into and what to change. Incident notes and emergency-department records are short free text, and the structured fields (where, when, injury) say little about how the fall started. Finding similar past cases means reading notes by hand or searching exact keywords, which miss different wording such as "found down," "long lie," or "NH."
@@ -33,9 +35,11 @@ Last week's architecture, following the course template:
 
 ![Architecture diagram](docs/architecture.png)
 
-*What changed in the build:* the search does not use a precomputed vector index. It runs a keyword search over all 57,209 notes, then re-ranks the top 60 with embeddings at run time. The ML box is now TF-IDF + SVD + K-Means (the random forest and regression were dropped, see section 3). Records are not stored in a database, and the flag log lasts for the session only.
+*What changed in the build:* the search does not use a precomputed vector index. It runs a keyword search over all 57,209 notes, then re-ranks the top 60 with embeddings at run time. The ML box is now TF-IDF + SVD + K-Means (the random forest and regression were dropped, see section 4). Records are not stored in a database, and the flag log lasts for the session only.
 
 ### Inputs, outputs, decision, action, and outcome
+**Input and modality:** text. The user types a description of the fall (optional place and age filters are dropdowns). **Output:** five similar real cases with the original note, a cited summary, and questions to check. **Successful interaction:** the person leaves knowing what similar falls looked like and what to look into or ask about, and can trace every statement back to a real note.
+
 | | Facility staff | Family caregiver or older adult |
 |---|---|---|
 | **Input** | Typed description of the fall, optional place and age filters | Description in everyday words, same optional filters |
@@ -51,21 +55,60 @@ Last week's sketch:
 
 Built in this checkpoint: the three-way mode choice, the description box and filters, similar cases with the original note and a tag, a flag button, the safety notice, and a low-match warning. Not built yet: voice input, the factor bar chart, the PDF export (a text download is provided instead), the room checklist, and the share button.
 
-### Dataset continuity: what stayed and what changed
+### Dataset continuity: deviations and iterations
 - **Same data.** The 2024 NEISS public file of emergency-department visits for falls by adults 65 and older (57,209 visits), with the narrative as the searchable text.
 - **Changed.** Instead of embedding a 2,000-note sample, the app searches all notes by keyword and embeds only the top candidates for each question. The eight-category factor tags from the earlier 50-row test are now generated on the fly for the 5 retrieved cases, and each tag must come with a quote that appears in the note.
-- **Carried over.** The keyword themes from the earlier notebook are the baseline the clustering is compared against in section 3.
+- **Carried over.** The keyword themes from the earlier notebook are the baseline the clustering is compared against in section 4.
 - **Limits.** NEISS covers only falls that reached an emergency department, has no denominators, and its notes are short and written by hospital staff. Counts describe retrieved cases and are not rates. The home mode uses the same search with different wording; narratives rarely name hazards (about 10% name a detail such as a rug or railing), so a home checklist would need outside home-safety guidance.
 
 ---
 
-## 2. Add an LLM and an agentic workflow
+## 2 Establish the User Experience and Service Design
+
+> *Requirements: a usable interface with clear navigation, feedback, error/empty states, and enough explanation for a new visitor to understand it without me present; at least two consequential UX or product decisions, including how I revised the experience after building or testing it.*
+
+**Understandable without me present.** The first screen shows a three-step explainer (describe, compare, review), a plain statement of what the tool is not, and a privacy note. The "How it works" tab explains the steps in plain words. **Navigation and structure.** Three tabs: *Check a fall* (the tool), *How it works* (the agent steps), and *About the data and models* (the ML evidence).
+
+**Feedback while it works.** A live step-by-step status appears while the assistant runs, followed by a "How this answer was produced" table showing each step, whether it used code, AI, or ML, and how long it took. Each case has a "this tag looks wrong" button.
+
+**States designed.** First visit (a 3-step explainer), loading, success, weak match, no match, description too short, AI unavailable (reduced mode), no key (offline mode), and unexpected error. The layout was checked at phone width (390 px) and desktop width (1100 px), and the colors follow my portfolio site.
+
+![Desktop preview](docs/preview_desktop.png)
+
+### Consequential decisions and how I revised them
+1. **Show the original note, word for word, beside every tag.**
+   *First version:* showed only the AI's tag and the summary. *Problem found when I walked through it:* nothing let a user check the AI. *Revision:* each case card shows the verbatim note, the tag, a label saying whether the quote was checked, and the summary items carry case-number chips that point to the cards.
+2. **Refuse to summarize when the match is weak.**
+   *First version:* always wrote a summary. *Problem found when I tried a nonsense description:* it still produced confident text. *Revision:* a match-quality check, a "weak match" state that shows notes but no summary, and a separate no-results state.
+
+**Smaller revisions.** The safety notice moved above all results and changes with the mode. Admission rates are hidden in the older-adult mode. Plain-language labels replaced category codes.
+
+---
+
+## 3 Integrate an LLM and an agentic workflow
+
+> *Requirements: an LLM used for a meaningful task; a multi-step agent that retrieves, invokes tools or models, checks intermediate output, or iterates (a fixed sequence is acceptable if its steps and purpose are clear); the workflow shown with input, stages or tools, data accessed, outputs, and decision points; guardrails, failure modes, and what happens when the system cannot answer reliably.*
 
 The assistant follows a fixed, nine-step order. It does not choose its own steps, which keeps it predictable and checkable. Each step is shown on screen under "How this answer was produced."
 
 ![Agentic workflow](docs/agent_workflow.png)
 
 **What the AI does:** suggests other ways the notes might word the same fall, re-ranks candidates by meaning, tags each case with a contributing factor, and drafts the summary. **What plain code does:** checks the input, searches, checks match quality, verifies quotes, and verifies the draft. The AI never gets the last word.
+
+### Stages, tools, data, and decisions
+| Stage | Tool | Data accessed | Output | Decision point |
+|---|---|---|---|---|
+| 1 Check input | Python rules | The typed description | Safety flags | Too short? Ask for more |
+| 2 Plan search | OpenAI chat model | The description | Alternate phrases, place hint | None (failure falls back to the user's own words) |
+| 3 Keyword search | TF-IDF in Python | All 57,209 notes | 60 candidates | None |
+| 4 Re-rank | OpenAI embeddings | The 60 candidate notes | Top 5 cases | None (failure keeps keyword order) |
+| 5 Check quality | Python thresholds | Similarity scores | Strong, weak, or none | Stop, widen a filter, or continue |
+| 6 Tag | OpenAI chat model + Python check | The 5 notes | Factor tag with a verified quote | Quote not in the note? Mark "unverified" |
+| 7 Story group | K-Means (offline ML) | Precomputed groups | Group label, mixed-results warning | Warn if cases disagree |
+| 8 Draft | OpenAI chat model | The 5 notes and tags only | Summary and checklist | None |
+| 9 Verify | Python rules | The draft and the 5 case ids | Verified summary | Pass, retry once, or fixed wording |
+
+The LLM is used for synthesis, classification (the factor tags), and structured output (JSON the code can check).
 
 ### Guardrails
 - Red-flag words (head strike, blood thinners, can't get up, and similar) show a safety notice before anything else.
@@ -89,7 +132,9 @@ The match-quality check (step 5) is the safeguard. If even the best note is a po
 
 ---
 
-## 3. Add a non-LLM machine learning method
+## 4 Incorporate traditional machine learning
+
+> *Requirements: at least one non-LLM method; the question it answers and why it fits; preprocessing, feature selection, fitting, and how outputs are interpreted; a consequential role in the app; and limitations with evidence.* This project uses **TF-IDF + SVD (a PCA-style compression) + K-Means clustering**, with PCA for the map.
 
 ### The question, in plain terms
 *"What kinds of fall stories show up in these notes, and which kind is this case most like?"* The notes do not come with a label for story type, so the computer has to find the groups on its own. This is called clustering. It fits because the app needs readable background for a case ("this looks like the bed-exit group"), not a prediction. I did not train a model to predict admission or fall risk: the data only includes people who reached an emergency department, so a risk score would be misleading.
@@ -123,26 +168,6 @@ Each group got a plain-language name that I wrote after reading its most common 
 Because of this, the groups are used as **rough background**, never as a score for a person. The data also only covers falls that reached an emergency department, so minor falls are missing.
 
 *Technical settings (for reference):* TF-IDF with 1 to 2 word phrases, min_df 5, max_df 0.5, 20,000 features, sublinear term frequency; TruncatedSVD with 50 components and normalization; K-Means with k = 8 chosen for readable group sizes (silhouette keeps rising with larger k, so it did not pick a clear winner); PCA to 2 dimensions for the map. Code is in `build_ml.py`.
-
----
-
-## 4. Build and refine the interface
-
-**Navigation and structure.** Three tabs: *Check a fall* (the tool), *How it works* (the agent steps), and *About the data and models* (the ML evidence).
-
-**Feedback while it works.** A live step-by-step status appears while the assistant runs, followed by a "How this answer was produced" table showing each step, whether it used code, AI, or ML, and how long it took. Each case has a "this tag looks wrong" button.
-
-**States designed.** First visit (a 3-step explainer), loading, success, weak match, no match, description too short, AI unavailable (reduced mode), no key (offline mode), and unexpected error. The layout was checked at phone width (390 px) and desktop width (1100 px), and the colors follow my portfolio site.
-
-![Desktop preview](docs/preview_desktop.png)
-
-### Consequential decisions and how I revised them
-1. **Show the original note, word for word, beside every tag.**
-   *First version:* showed only the AI's tag and the summary. *Problem found when I walked through it:* nothing let a user check the AI. *Revision:* each case card shows the verbatim note, the tag, a label saying whether the quote was checked, and the summary items carry case-number chips that point to the cards.
-2. **Refuse to summarize when the match is weak.**
-   *First version:* always wrote a summary. *Problem found when I tried a nonsense description:* it still produced confident text. *Revision:* a match-quality check, a "weak match" state that shows notes but no summary, and a separate no-results state.
-
-**Smaller revisions.** The safety notice moved above all results and changes with the mode. Admission rates are hidden in the older-adult mode. Plain-language labels replaced category codes.
 
 ---
 
