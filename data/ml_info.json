@@ -1,0 +1,306 @@
+{
+ "metrics": {
+  "n_narratives": 57209,
+  "tfidf_vocabulary": 15510,
+  "svd_components": 50,
+  "variance_kept_by_svd": 0.1755,
+  "k_chosen": 8,
+  "silhouette_by_k": {
+   "5": 0.056,
+   "6": 0.0683,
+   "7": 0.0729,
+   "8": 0.0791,
+   "9": 0.0853,
+   "10": 0.0948,
+   "11": 0.0938,
+   "12": 0.1012
+  },
+  "seed_stability_ARI": [
+   0.732,
+   0.432,
+   0.38
+  ],
+  "seed_stability_mean": 0.515,
+  "nmi_vs_keyword_themes": 0.202,
+  "narratives_with_a_keyword_theme": 40508,
+  "auc_admission_from_group_only": 0.605,
+  "auc_admission_from_age_only": 0.542,
+  "overall_admitted_rate": 0.3252
+ },
+ "groups": [
+  {
+   "group": 0,
+   "size": 3051,
+   "share": 0.0533,
+   "top_terms": [
+    "nursing home",
+    "nursing",
+    "home",
+    "floor nursing",
+    "floor",
+    "bed",
+    "bed nursing",
+    "head",
+    "home striking",
+    "striking"
+   ],
+   "admitted_rate": 0.2933,
+   "median_age": 84.0,
+   "home_share": 0.0374,
+   "other_public_share": 0.9607,
+   "theme_mix": {
+    "dizzy_faint": 0.026,
+    "found_down": 0.152,
+    "trip_slip": 0.128,
+    "bed": 0.265,
+    "bathroom_toilet": 0.046,
+    "stairs": 0.003,
+    "lost_balance": 0.007
+   }
+  },
+  {
+   "group": 1,
+   "size": 8155,
+   "share": 0.1425,
+   "top_terms": [
+    "floor",
+    "floor home",
+    "home",
+    "bathroom",
+    "unwitnessed",
+    "tripped floor",
+    "head",
+    "tripped",
+    "unwitnessed floor",
+    "bathroom floor"
+   ],
+   "admitted_rate": 0.4417,
+   "median_age": 79.0,
+   "home_share": 0.6435,
+   "other_public_share": 0.1792,
+   "theme_mix": {
+    "dizzy_faint": 0.153,
+    "found_down": 0.19,
+    "trip_slip": 0.181,
+    "bed": 0.002,
+    "bathroom_toilet": 0.05,
+    "stairs": 0.007,
+    "lost_balance": 0.032
+   }
+  },
+  {
+   "group": 2,
+   "size": 4580,
+   "share": 0.0801,
+   "top_terms": [
+    "hit",
+    "hit head",
+    "head",
+    "floor",
+    "bed hit",
+    "home",
+    "head floor",
+    "bed",
+    "home hit",
+    "tripped"
+   ],
+   "admitted_rate": 0.2205,
+   "median_age": 78.0,
+   "home_share": 0.536,
+   "other_public_share": 0.1513,
+   "theme_mix": {
+    "dizzy_faint": 0.105,
+    "found_down": 0.034,
+    "trip_slip": 0.219,
+    "bed": 0.095,
+    "bathroom_toilet": 0.075,
+    "stairs": 0.06,
+    "lost_balance": 0.013
+   }
+  },
+  {
+   "group": 3,
+   "size": 5830,
+   "share": 0.1019,
+   "top_terms": [
+    "bed",
+    "getting bed",
+    "getting",
+    "bed floor",
+    "floor",
+    "pain",
+    "facility",
+    "home",
+    "head",
+    "complains"
+   ],
+   "admitted_rate": 0.3973,
+   "median_age": 80.0,
+   "home_share": 0.6127,
+   "other_public_share": 0.2045,
+   "theme_mix": {
+    "dizzy_faint": 0.079,
+    "found_down": 0.143,
+    "trip_slip": 0.116,
+    "bed": 0.661,
+    "bathroom_toilet": 0.0,
+    "stairs": 0.0,
+    "lost_balance": 0.0
+   }
+  },
+  {
+   "group": 4,
+   "size": 4943,
+   "share": 0.0864,
+   "top_terms": [
+    "striking",
+    "striking head",
+    "head",
+    "floor",
+    "loss",
+    "head floor",
+    "blood",
+    "floor striking",
+    "loss consciousness",
+    "bed striking"
+   ],
+   "admitted_rate": 0.2915,
+   "median_age": 79.0,
+   "home_share": 0.5505,
+   "other_public_share": 0.1511,
+   "theme_mix": {
+    "dizzy_faint": 0.155,
+    "found_down": 0.029,
+    "trip_slip": 0.319,
+    "bed": 0.103,
+    "bathroom_toilet": 0.058,
+    "stairs": 0.051,
+    "lost_balance": 0.021
+   }
+  },
+  {
+   "group": 5,
+   "size": 23701,
+   "share": 0.4143,
+   "top_terms": [
+    "tripped",
+    "pain",
+    "stairs",
+    "steps",
+    "head",
+    "left",
+    "chair",
+    "right",
+    "hitting",
+    "home"
+   ],
+   "admitted_rate": 0.2706,
+   "median_age": 76.0,
+   "home_share": 0.5072,
+   "other_public_share": 0.1279,
+   "theme_mix": {
+    "dizzy_faint": 0.08,
+    "found_down": 0.035,
+    "trip_slip": 0.32,
+    "bed": 0.009,
+    "bathroom_toilet": 0.068,
+    "stairs": 0.145,
+    "lost_balance": 0.012
+   }
+  },
+  {
+   "group": 6,
+   "size": 4024,
+   "share": 0.0703,
+   "top_terms": [
+    "hip",
+    "hip pain",
+    "pain",
+    "left hip",
+    "right hip",
+    "right",
+    "left",
+    "landing",
+    "complains",
+    "floor"
+   ],
+   "admitted_rate": 0.5378,
+   "median_age": 80.0,
+   "home_share": 0.5335,
+   "other_public_share": 0.1466,
+   "theme_mix": {
+    "dizzy_faint": 0.048,
+    "found_down": 0.059,
+    "trip_slip": 0.295,
+    "bed": 0.113,
+    "bathroom_toilet": 0.06,
+    "stairs": 0.081,
+    "lost_balance": 0.015
+   }
+  },
+  {
+   "group": 7,
+   "size": 2925,
+   "share": 0.0511,
+   "top_terms": [
+    "balance",
+    "lost balance",
+    "lost",
+    "balance floor",
+    "head",
+    "floor",
+    "balance backwards",
+    "backwards",
+    "striking",
+    "home"
+   ],
+   "admitted_rate": 0.2605,
+   "median_age": 81.0,
+   "home_share": 0.573,
+   "other_public_share": 0.1388,
+   "theme_mix": {
+    "dizzy_faint": 0.034,
+    "found_down": 0.023,
+    "trip_slip": 0.044,
+    "bed": 0.066,
+    "bathroom_toilet": 0.106,
+    "stairs": 0.109,
+    "lost_balance": 0.573
+   }
+  }
+ ],
+ "labels": {
+  "0": {
+   "label": "Nursing-home falls and transfers",
+   "note": "Notes that mention a nursing home or facility; 96% are in the care-facility location category."
+  },
+  "1": {
+   "label": "Fell to the floor, often unwitnessed",
+   "note": "Falls to the floor, often found by someone or not seen; bathrooms and floors come up often."
+  },
+  "2": {
+   "label": "Got up or out of bed, then hit the head",
+   "note": "Falls that include hitting the head while getting up."
+  },
+  "3": {
+   "label": "Falls getting out of bed",
+   "note": "Bed exits, including at facilities."
+  },
+  "4": {
+   "label": "Tripped or fell and struck the head",
+   "note": "Falls with a head strike."
+  },
+  "5": {
+   "label": "Everyday trips, steps, and slips (largest group)",
+   "note": "A broad group: trips, stairs, steps, chairs, and many other situations."
+  },
+  "6": {
+   "label": "Fell onto the hip",
+   "note": "Notes that describe landing on the hip or hip pain; the highest share ended in hospital admission."
+  },
+  "7": {
+   "label": "Lost balance",
+   "note": "Notes that say the person lost their balance, often while doing a routine task."
+  }
+ }
+}
