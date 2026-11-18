@@ -202,8 +202,7 @@ def trace_table(trace):
 
 def footer():
     return ("<div class='foot'>This tool searches public emergency-department notes (U.S. CPSC NEISS, 2024). It does not diagnose, predict, or give medical advice. "
-            "Do not type names, addresses, or other identifying details: your description is sent to an AI service to produce the results and is not saved by this app. "
-            "Student prototype for DESIGNTK 530 (Duke M.Eng. Design and Technology Innovation).</div>")
+            "Do not type names, addresses, or other identifying details: your description is sent to an AI service to produce the results and is not saved by this app." "</div>")
 
 # ======================================================================
 # THE APP
