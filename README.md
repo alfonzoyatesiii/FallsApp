@@ -51,7 +51,7 @@ Last week's architecture, following the course template:
 ### Interface sketch
 Last week's sketch:
 
-![Interface sketch](docs/interface_sketch.png)
+![Interface sketch](docs/interface_sketch.jpeg)
 
 Built in this checkpoint: the three-way mode choice, the description box and filters, similar cases with the original note and a tag, a flag button, the safety notice, and a low-match warning. Not built yet: voice input, the factor bar chart, the PDF export (a text download is provided instead), the room checklist, and the share button.
 
